@@ -1,0 +1,16 @@
+Allow PHP in Default Text Widgets
+File to Edit: Functions.php
+The default text widget in WordPress only supports HTML. If you insert the following snippet into your theme functions.php file, you can also use PHP code.
+This greatly extends the functionality of the text widget. For example, you could use the text widget to display custom functions, PHP queries, calls to external files, and more
+
+add_filter('widget_text', 'php_text', 99);
+ 
+function php_text($text) {
+ if (strpos($text, '<' . '?') !== false) {
+ ob_start();
+ eval('?' . '>' . $text);
+ $text = ob_get_contents();
+ ob_end_clean();
+ }
+ return $text;
+}
